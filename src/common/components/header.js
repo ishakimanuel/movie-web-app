@@ -5,7 +5,7 @@ import Logo from './logo';
 const Header = () => {
   return (
     <div className="bg-dark p-5">
-      <Link isLink to="/">
+      <Link to="/">
         <Logo size="5xl" />
       </Link>
     </div>

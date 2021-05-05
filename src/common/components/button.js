@@ -34,7 +34,3 @@ Button.defaultProps = {
   size: 'normal',
   Tag: 'button',
 };
-
-export const ButtonLink = () => {
-  return <Button></Button>;
-};

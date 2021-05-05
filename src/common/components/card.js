@@ -1,7 +1,8 @@
 import React from 'react';
+import { Button } from './button';
 
 export const CardBody = (props) => {
-  return <div className="card-body p-4" {...props} />;
+  return <div className="card-body p-4 h-40 self-center" {...props} />;
 };
 
 export const CardHeader = (props) => {
@@ -11,24 +12,20 @@ export const CardHeader = (props) => {
 export const CardImage = (props) => {
   return (
     <div
-      className="relative bg-black shadow-lg group h-80 flex justify-center items-center"
+      className="relative bg-black rounded-lg shadow-lg group h-60 flex justify-center items-center"
       onClick={props.onClick}
     >
       <div
         style={{
           backgroundImage: `url(${props.bgUrl})`,
-          overflow: 'hidden',
         }}
-        className="h-full w-full absolute z-10 bg-cover bg-center hover:opacity-50 transition-all duration-500 ease-in-out"
+        className="rounded-lg h-full w-full absolute z-10 bg-cover bg-center hover:opacity-50 transition-all duration-500 ease-in-out"
       />
-      <p className="font-bold text-lg text-white absolute z-20 pointer-events-none">
-        {props.bgTitle}
-      </p>
     </div>
   );
 };
 
-export const Card = (props) => {
+export const CardContainer = (props) => {
   const { className, ...attributes } = props;
   return (
     <div
@@ -38,22 +35,26 @@ export const Card = (props) => {
   );
 };
 
-export const CardWithImage = (props) => {
+export const Card = (props) => {
   const {
     children,
     bgUrl,
     bgTitle,
     onClickImg = () => null,
+    url,
     ...attributes
   } = props;
   return (
-    <Card {...attributes}>
+    <CardContainer {...attributes} className="grid grid-rows-1">
       <CardHeader>
         <CardImage onClick={onClickImg} bgUrl={bgUrl} bgTitle={bgTitle} />
       </CardHeader>
       <CardBody>{children}</CardBody>
-    </Card>
+      <Button to={url} isLink className="p-2">
+        See Detail
+      </Button>
+    </CardContainer>
   );
 };
 
-export default Card;
+export default CardContainer;
