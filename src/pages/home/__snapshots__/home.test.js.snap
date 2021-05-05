@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home Page Should render consistent homepage UI 1`] = `
+<DocumentFragment>
+  <div
+    class="homepage flex h-screen bg-dark flex-col items-center justify-center text-center"
+  >
+    <div
+      class="w-50"
+    >
+      <div>
+        <h1
+          class="logo ff-heading text-8xl undefined"
+        >
+          <span
+            class="text-primary"
+          >
+            Movie
+          </span>
+          <span
+            class="text-white"
+          >
+            App
+          </span>
+        </h1>
+      </div>
+      <a
+        aria-label="explore-button"
+        class="button font-bold text-white uppercase ff-heading p-4 text-2xl bg-primary mt-5 inline-block"
+        href="/movies"
+      >
+        Explore Now
+      </a>
+    </div>
+  </div>
+</DocumentFragment>
+`;
