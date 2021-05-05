@@ -7,28 +7,57 @@ import Modal from 'common/components/modal/modal';
 import useModal from 'common/hooks/use-modal';
 import { REQUEST_STATUS } from 'common/constants/request.constant';
 import Spinner from 'common/components/spinner/spinner';
+import {
+  fetchMovieSuggestions,
+  movieSuggestionsActions,
+} from './movie-suggestions.redux';
+import { FiniteScroll } from 'common/components/finite-scroll';
 
 const MovieList = () => {
   const movieList = useSelector((state) => state.movieList);
+  const movieSuggestions = useSelector((state) => state.movieSuggestions);
 
   const [keyword, setKeyword] = useState(movieList.lastKeyword);
   const dispatch = useDispatch();
   const { openModal, isOpen, closeModal, state: modalState } = useModal();
-
   useEffect(() => {
-    dispatch(fetchMovieList(keyword));
+    dispatch(fetchMovieList({ keyword }));
   }, []);
+
+  const onChangeInputSearch = (e) => {
+    setKeyword(e.target.value);
+    dispatch(fetchMovieSuggestions(e.target.value));
+  };
 
   const onSubmitKeyword = (e) => {
     e.preventDefault();
     if (keyword !== movieList.lastKeyword) {
-      dispatch(fetchMovieList(keyword));
+      dispatch(fetchMovieList({ keyword }));
     }
+    dispatch(movieSuggestionsActions.resetSuggestions());
+  };
+
+  const onClickMovieSuggestion = (suggestion = {}) => {
+    setKeyword(suggestion.Title);
+    dispatch(fetchMovieList({ keyword: suggestion.Title }));
+    dispatch(movieSuggestionsActions.resetSuggestions());
+  };
+
+  const onLastScrollMovieList = () => {
+    console.log('onLastScroll');
+    dispatch(
+      fetchMovieList({
+        keyword: keyword,
+        page: movieList.pagination.currentPage + 1,
+        isNextList: true,
+      })
+    );
   };
 
   const shouldNotRenderMovieList =
-    movieList.requestStatus === REQUEST_STATUS.idle ||
-    movieList.requestStatus === REQUEST_STATUS.pending;
+    (movieList.requestStatus === REQUEST_STATUS.idle ||
+      movieList.requestStatus === REQUEST_STATUS.pending) &&
+    !movieList.list.length;
 
   const renderMovieList = () => {
     if (shouldNotRenderMovieList) {
@@ -46,8 +75,15 @@ const MovieList = () => {
         </h2>
       );
     return (
-      <div className="movie-list grid-cols-5 grid gap-6 pt-5 pb-5">
-        {movieList.list.map((item) => (
+      <FiniteScroll
+        itemList={movieList.list}
+        className="movie-list grid-cols-5 grid gap-6 pt-5 pb-5"
+        totalPage={movieList.pagination.totalPage}
+        currentPage={movieList.pagination.currentPage}
+        onLastScroll={onLastScrollMovieList}
+        isLoading={movieList.requestStatus === REQUEST_STATUS.pending}
+      >
+        {(item) => (
           <Card
             key={item.imdbID}
             className="cursor-pointer"
@@ -65,8 +101,8 @@ const MovieList = () => {
               <span className="font-bold">Year:</span> {item.Year}
             </p>
           </Card>
-        ))}
-      </div>
+        )}
+      </FiniteScroll>
     );
   };
 
@@ -85,8 +121,10 @@ const MovieList = () => {
         <InputSearch
           onSubmit={onSubmitKeyword}
           value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
+          onChange={onChangeInputSearch}
+          onClickSuggestion={onClickMovieSuggestion}
           className="w-50"
+          suggestionList={movieSuggestions.list}
         />
         {renderMovieList()}
       </div>

@@ -15,12 +15,29 @@ export const InputSearch = (props) => {
           SEARCH
         </Button>
       </div>
+      {!!props.suggestionList.length && (
+        <ul
+          className="p-4 suggestion-list grid  bg-dark text-white"
+          style={{ maxHeight: '200px', overflowY: 'scroll' }}
+        >
+          {props.suggestionList.map((suggestion) => (
+            <li
+              onClick={() => props.onClickSuggestion(suggestion)}
+              className="mb-2 underline cursor-pointer"
+            >
+              {suggestion.Title}
+            </li>
+          ))}
+        </ul>
+      )}
     </form>
   );
 };
 
 InputSearch.defaultProps = {
   className: '',
+  suggestionList: [],
+  onClickSuggestion: () => null,
 };
 
 export const Input = (props) => {

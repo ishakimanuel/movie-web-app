@@ -48,7 +48,6 @@ const Modal = (props) => {
     }
   );
 
-  console.log(shouldShowContent);
   return (
     <React.Fragment>
       {(props.open || shouldShowContent) && (

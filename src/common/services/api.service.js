@@ -1,20 +1,11 @@
 import axios from 'axios';
 import { API_KEY } from 'common/constants/api.constant';
 import { REQUEST_STATUS } from 'common/constants/request.constant';
-import store from 'store.redux';
+// import store from 'store.redux';
 
 export const requestSources = {};
 
 const getReduxHelper = (requestId) => {
-  const errorActionType = `${requestId}/error`;
-
-  const errorActionCreator = (error) => {
-    return {
-      type: errorActionType,
-      payload: error?.response,
-    };
-  };
-
   // only works with redux builder callback
   const apiRequestReducer = (
     builder,
@@ -42,27 +33,23 @@ const getReduxHelper = (requestId) => {
       .addCase(rejected, (state, action) => {
         state.requestStatus = REQUEST_STATUS.rejected;
         onRejected(state, action);
-      })
-      .addCase(errorActionType, (state, action) => {
-        state.requestStatus = REQUEST_STATUS.error;
-        state.errorResponse = action.payload;
-        onError(state, action);
       });
-
     return builder;
   };
 
   return {
-    errorActionType,
-    errorActionCreator,
     apiRequestReducer,
   };
 };
 
 const apiService = (requestId) => {
-  const { errorActionCreator, apiRequestReducer } = getReduxHelper(requestId);
+  const { apiRequestReducer } = getReduxHelper(requestId);
 
   const onRequest = async (data) => {
+    const source = requestSources[requestId];
+    if (source) {
+      source.cancel();
+    }
     const request = axios.CancelToken.source();
 
     requestSources[requestId] = request;
@@ -71,15 +58,13 @@ const apiService = (requestId) => {
     return data;
   };
 
-  const onSuccessResponse = (response, aku) => {
+  const onSuccessResponse = (response) => {
     delete requestSources[requestId];
     return response;
   };
 
   const onErrorResponse = (error) => {
-    delete requestSources[requestId];
-
-    store.dispatch(errorActionCreator(error));
+    // store.dispatch(errorActionCreator(error));
     return Promise.reject(error);
   };
 
@@ -100,13 +85,11 @@ const apiService = (requestId) => {
   ) => {
     const instance = getInstance();
     const combinedParams = getQueryParams({ apikey: API_KEY, ...query });
-    return instance[method](`${endpoint}${combinedParams}`, body)
-      .then((response) => {
+    return instance[method](`${endpoint}${combinedParams}`, body).then(
+      (response) => {
         return response.data;
-      })
-      .catch((err) => {
-        return err;
-      });
+      }
+    );
   };
 
   const getQueryParams = (params = {}) => {

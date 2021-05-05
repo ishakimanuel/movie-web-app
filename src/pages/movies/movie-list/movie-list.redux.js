@@ -8,18 +8,26 @@ export const setLastKeyword = createAction('setLastKeyword');
 
 export const fetchMovieList = createAsyncThunk(
   'fetchMovieList',
-  async (keyword, { getState, dispatch }) => {
-    const { movieList } = getState();
+  async ({ keyword, page = 1, isNextList }, { getState, dispatch }) => {
     dispatch(setLastKeyword(keyword));
     const response = await request({
       query: {
         s: keyword,
-        page: movieList.pagination.currentPage,
+        page: page,
       },
     });
-    return { ...response, keyword };
+
+    if (isNextList && response.Search?.length) {
+      response.Search.unshift(...getState().movieList.list);
+    }
+
+    return { ...response, keyword, page, isNextList };
   }
 );
+
+const calculateTotalPage = (limit, totalData) => {
+  return Math.ceil(totalData / limit);
+};
 
 const initialState = {
   list: [],
@@ -27,7 +35,7 @@ const initialState = {
   pagination: {
     currentPage: 1,
     totalPage: 0,
-    totalData: 0,
+    limit: 10,
   },
   isNotFound: false,
   lastKeyword: 'batman',
@@ -36,7 +44,6 @@ const initialState = {
 const movieListSlice = createSlice({
   name: 'movieList',
   initialState,
-  reducers: {},
   extraReducers: (builder) => {
     apiRequestReducer(builder, fetchMovieList, {
       onPending: (state) => {
@@ -44,9 +51,13 @@ const movieListSlice = createSlice({
       },
       onFulfilled: (state, action) => {
         if (!action.payload.Error) {
-          state.list = action.payload.Search;
-          state.pagination.totalPage = action.payload.totalResults;
           state.lastKeyword = action.payload.keyword;
+          state.list = action.payload.Search;
+          state.pagination.currentPage = action.payload.page;
+          state.pagination.totalPage = calculateTotalPage(
+            state.pagination.limit,
+            parseInt(action.payload.totalResults)
+          );
         } else {
           state.isNotFound = true;
         }
