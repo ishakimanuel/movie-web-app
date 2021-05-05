@@ -12,7 +12,7 @@ export const CardHeader = (props) => {
 export const CardImage = (props) => {
   return (
     <div
-      className="relative bg-black rounded-lg shadow-lg group h-60 flex justify-center items-center"
+      className="relative cursor-pointer bg-black rounded-lg shadow-lg group h-60 flex justify-center items-center"
       onClick={props.onClick}
     >
       <div

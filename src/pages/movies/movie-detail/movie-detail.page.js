@@ -16,7 +16,12 @@ const MovieDetailPage = () => {
     }
   }, []);
 
-  if (requestStatus === REQUEST_STATUS.pending) return <Spinner />;
+  if (
+    requestStatus === REQUEST_STATUS.pending ||
+    requestStatus === REQUEST_STATUS.idle
+  ) {
+    return <Spinner />;
+  }
 
   return (
     <div

@@ -23,6 +23,7 @@ const getReduxHelper = (requestId) => {
       onFulfilled = () => null,
       onPending = () => null,
       onRejected = () => null,
+      onError = () => null,
     }
   ) => {
     if (!builder || !thunkAction) return;
@@ -45,7 +46,7 @@ const getReduxHelper = (requestId) => {
       .addCase(errorActionType, (state, action) => {
         state.requestStatus = REQUEST_STATUS.error;
         state.errorResponse = action.payload;
-        onRejected(state, action);
+        onError(state, action);
       });
 
     return builder;
