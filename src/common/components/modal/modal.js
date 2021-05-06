@@ -52,7 +52,7 @@ const Modal = (props) => {
     <React.Fragment>
       {(props.open || shouldShowContent) && (
         <Portal className="modal-portal">
-          <div ref={backdrop} className={backdropClassNames}>
+          <div role={props.role} ref={backdrop} className={backdropClassNames}>
             <div className="modal-content relative bg-white shadow box-border">
               {props.children}
             </div>

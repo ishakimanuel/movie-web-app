@@ -14,6 +14,7 @@ export const CardImage = (props) => {
     <div
       className="relative cursor-pointer bg-black rounded-lg shadow-lg group h-60 flex justify-center items-center"
       onClick={props.onClick}
+      role="card-image"
     >
       <div
         style={{

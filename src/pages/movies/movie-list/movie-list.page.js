@@ -1,59 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { Card } from '../../../common/components/card';
-import { InputSearch } from '../../../common/components/input/input';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchMovieList } from 'pages/movies/movie-list/movie-list.redux';
+import { Card } from 'common/components/card';
+import { InputSearch } from 'common/components/input/input';
+import { useSelector } from 'react-redux';
+import {} from 'pages/movies/movie-list/movie-list.redux';
 import Modal from 'common/components/modal/modal';
 import useModal from 'common/hooks/use-modal';
-import { REQUEST_STATUS } from 'common/constants/request.constant';
 import Spinner from 'common/components/spinner/spinner';
-import {
-  fetchMovieSuggestions,
-  movieSuggestionsActions,
-} from './movie-suggestions.redux';
 import { FiniteScroll } from 'common/components/finite-scroll';
+import useMovieList from './use-movie-list';
 
-const MovieList = () => {
-  const dispatch = useDispatch();
+import { REQUEST_STATUS } from 'common/constants/request.constant';
+
+const MovieListPage = () => {
   const movieList = useSelector((state) => state.movieList);
   const movieSuggestions = useSelector((state) => state.movieSuggestions);
-
-  const [keyword, setKeyword] = useState(movieList.lastKeyword);
-
   const { openModal, isOpen, closeModal, state: modalState } = useModal();
 
-  useEffect(() => {
-    dispatch(fetchMovieList({ keyword }));
-  }, []);
-
-  const onChangeInputSearch = (e) => {
-    setKeyword(e.target.value);
-    dispatch(fetchMovieSuggestions(e.target.value));
-  };
-
-  const onSubmitKeyword = (e) => {
-    e.preventDefault();
-    if (keyword !== movieList.lastKeyword) {
-      dispatch(fetchMovieList({ keyword }));
-    }
-    dispatch(movieSuggestionsActions.resetSuggestions());
-  };
-
-  const onClickMovieSuggestion = (suggestion = {}) => {
-    setKeyword(suggestion.Title);
-    dispatch(fetchMovieList({ keyword: suggestion.Title }));
-    dispatch(movieSuggestionsActions.resetSuggestions());
-  };
-
-  const onLastScrollMovieList = () => {
-    dispatch(
-      fetchMovieList({
-        keyword: keyword,
-        page: movieList.pagination.currentPage + 1,
-        isNextList: true,
-      })
-    );
-  };
+  const {
+    onLastScrollMovieList,
+    onSubmitKeyword,
+    keyword,
+    onChangeInputSearch,
+    onClickMovieSuggestion,
+  } = useMovieList();
 
   const shouldNotRenderMovieList =
     (movieList.requestStatus === REQUEST_STATUS.idle ||
@@ -65,9 +33,17 @@ const MovieList = () => {
       return <Spinner />;
     }
 
+    if (movieList.error) {
+      return (
+        <h2 className="mt-3" aria-label="error">
+          {movieList.error}
+        </h2>
+      );
+    }
+
     if (movieList.isNotFound)
       return (
-        <h2 className="mt-3">
+        <h2 className="mt-3" aria-label="not-found">
           Result for{' '}
           <span className="text-primary underline">
             {movieList.lastKeyword}
@@ -87,6 +63,7 @@ const MovieList = () => {
       >
         {(item) => (
           <Card
+            role="movie-card"
             key={item.imdbID}
             className="cursor-pointer"
             bgUrl={item.Poster}
@@ -111,10 +88,15 @@ const MovieList = () => {
   return (
     <div className="movies-page">
       <Modal
+        role="movie-modal"
         open={isOpen}
         closeModal={() => closeModal({ imgUrl: null, title: null })}
       >
-        <img src={modalState.imgUrl} alt={modalState.title} />
+        <img
+          aria-label="modal-img"
+          src={modalState.imgUrl}
+          alt={modalState.title}
+        />
       </Modal>
       <div className="content">
         <h2 className="text-3xl font-light mt-5 mb-3">
@@ -134,4 +116,4 @@ const MovieList = () => {
   );
 };
 
-export default MovieList;
+export default MovieListPage;

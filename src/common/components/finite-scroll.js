@@ -44,7 +44,7 @@ export const FiniteScroll = React.memo((props) => {
   };
 
   return (
-    <div id="finiteScroll" {...atributtes}>
+    <div role="finite-scroll" id="finiteScroll" {...atributtes}>
       {renderItems()}
       {isLoading && (
         <div className="flex-column y-center">

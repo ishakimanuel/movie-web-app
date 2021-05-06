@@ -39,6 +39,7 @@ const initialState = {
   },
   isNotFound: false,
   lastKeyword: 'batman',
+  error: '',
 };
 
 const movieListSlice = createSlice({
@@ -48,6 +49,7 @@ const movieListSlice = createSlice({
     apiRequestReducer(builder, fetchMovieList, {
       onPending: (state) => {
         state.isNotFound = false;
+        state.error = '';
       },
       onFulfilled: (state, action) => {
         if (!action.payload.Error) {
@@ -61,6 +63,9 @@ const movieListSlice = createSlice({
         } else {
           state.isNotFound = true;
         }
+      },
+      onRejected: (state) => {
+        state.error = 'Sorry, we are in the trouble. Please try again later..';
       },
     }).addCase(setLastKeyword, (state, action) => {
       state.lastKeyword = action.payload;

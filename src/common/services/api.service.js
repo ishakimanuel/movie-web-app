@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { API_KEY } from 'common/constants/api.constant';
 import { REQUEST_STATUS } from 'common/constants/request.constant';
-// import store from 'store.redux';
 
 export const requestSources = {};
 

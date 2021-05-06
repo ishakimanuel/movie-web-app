@@ -1,70 +1,51 @@
-const { render, screen, waitFor } = require('@testing-library/react');
-const { MemoryRouter, Route } = require('react-router-dom');
+const { screen, waitFor } = require('@testing-library/react');
+const { Route } = require('react-router-dom');
 const { default: MovieDetailPage } = require('./movie-detail.page');
-const { Provider } = require('react-redux');
-const { createStore } = require('redux');
 const { movieDetailReducer } = require('./movie-detail.redux');
 const { REQUEST_STATUS } = require('common/constants/request.constant');
+const { renderWithRouterAndRedux } = require('common/utils/test.util');
 
-function renderMovieDetailWithRouter(
-  initialEntries = [],
-  initialState = {},
-  components = []
-) {
-  const store = createStore(movieDetailReducer, initialState);
-  const props = {};
-  if (initialEntries.length) {
-    props.initialEntries = initialEntries;
-  }
-
-  const Wrapper = ({ children }) => {
-    return <Provider store={store}>{children}</Provider>;
-  };
-
-  const renderComponents = (components) =>
-    components.map((Component, i) => <Component key={i} />);
-
-  return render(
-    <MemoryRouter {...props}>
-      <MovieDetailPage />
-      {!!components.length && renderComponents(components)}
-    </MemoryRouter>,
-    { wrapper: Wrapper }
-  );
-}
+const renderMovieDetail = (routes, initialState) => {
+  let testLocation;
+  renderWithRouterAndRedux(movieDetailReducer, routes, initialState, [
+    MovieDetailPage,
+    () => (
+      <Route
+        render={({ location }) => {
+          testLocation = location;
+          return null;
+        }}
+      />
+    ),
+  ]);
+  return { testLocation };
+};
 
 describe('Movie detail page', () => {
   test('should render movie detail with right url', () => {
-    let testLocation;
     const routes = ['/movies/movieId'];
 
-    renderMovieDetailWithRouter(routes, { movieDetail: { detail: {} } }, [
-      () => (
-        <Route
-          render={({ location }) => {
-            testLocation = location;
-            return null;
-          }}
-        />
-      ),
-    ]);
+    const { testLocation } = renderMovieDetail(routes, {
+      movieDetail: { detail: {} },
+    });
 
     expect(testLocation.pathname).toBe(routes[0]);
   });
 
   test('should render loading indicator', () => {
-    renderMovieDetailWithRouter([], {
+    renderMovieDetail([], {
       movieDetail: {
         requestStatus: REQUEST_STATUS.pending,
       },
     });
+
     const loadingIndicator = screen.getByRole('spinner');
 
     expect(loadingIndicator).toBeInTheDocument();
   });
 
   test('should not render loading indicator', async () => {
-    renderMovieDetailWithRouter([], {
+    renderMovieDetail([], {
       movieDetail: {
         requestStatus: REQUEST_STATUS.succeeded,
         detail: {},
@@ -90,7 +71,7 @@ describe('Movie detail page', () => {
       Writer: 'N/A',
       Plot: 'lorem lorem lorem',
     };
-    renderMovieDetailWithRouter([], {
+    renderMovieDetail([], {
       movieDetail: {
         requestStatus: REQUEST_STATUS.succeeded,
         detail: mock,
