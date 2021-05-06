@@ -21,7 +21,7 @@ After all dependencies installed, here all the available commands:
 
 - `yarn dev` to running the repo in development mode
 - `yarn build` to build the repo in ready production
-- `yarn` test to run the unit test
+- `yarn test` test to run the unit test
 
 ## Features
 
