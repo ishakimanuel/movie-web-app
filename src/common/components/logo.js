@@ -5,7 +5,7 @@ const Logo = (props) => {
     <div>
       <h1 className={`logo ff-heading text-${props.size} ${props.className}`}>
         <span className="text-primary">Movie</span>
-        <span className="text-white">App</span>
+        <span className="text-white">WebApp</span>
       </h1>
     </div>
   );

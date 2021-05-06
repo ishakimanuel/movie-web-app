@@ -1,12 +1,10 @@
-# test readme
-
 # MovieWebApp
 
-A website that shows movies base on imdb api. Using react js, redux and other modern frontend dependencies, build with create-react-app.
+A website that shows movies base on [imdb api](https://www.omdbapi.com/). Using react js, redux and other modern frontend dependencies, build with create-react-app.
 
 ## Tech stack
 
-- React
+- React + create-react-app
 - TailwindCSS
 - Redux + toolkit
 - Axios
