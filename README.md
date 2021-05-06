@@ -30,7 +30,7 @@ After all dependencies installed, here all the available commands to run this re
     - Will show initial movie list with default search keyword
     - Search movie base on keyword (will start fetching on enter or click search button)
     - Search movie with keyword suggestions, click one of keyword  from suggestion list to start fetching movie list base on that keyword.
-    - Finite scroll with default last offset, it means, next list will start fetched without wait for last item visible on screen
-    - Click on movie card image will open modal that shows selected movie poster
+    - Finite scroll with default last offset, it means, next list will start fetching without waiting for last item to be visible on screen
+    - Click on movie card image will open a modal that shows that movie poster
     - Click on see detail button will redirect to it’s detail page
 - A movie detail page which shows full information about the movie (base on imdbid)
