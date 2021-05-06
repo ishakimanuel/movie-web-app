@@ -29,6 +29,7 @@ const MovieDetailPage = () => {
       style={{ minHeight: '78vh' }}
     >
       <div
+        title="Poster"
         className="poster bg-size bg-cover bg-center"
         style={{ backgroundImage: `url(${detail.Poster})` }}
       />
@@ -56,14 +57,14 @@ const MovieDetailPage = () => {
             <span className="text-primary">{detail.Production}</span>
           </h5>
           <h5>
-            Writter:
+            Writer:{' '}
             <span className="text-primary text-sm"> {detail.Writer}</span>
           </h5>
         </div>
 
-        <div className="plot">
+        <article className="plot">
           <p className="font-thin text-3xl mt-3 leading-10">{detail.Plot}</p>
-        </div>
+        </article>
       </div>
     </div>
   );
