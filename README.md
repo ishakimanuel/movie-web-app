@@ -13,9 +13,9 @@ A website that shows movies base on [imdb api](https://www.omdbapi.com/). Using 
 
 ## Installation and run
 
-All you need is to clone this repo and instal all the dependencies, using npm or yarn (i recommend to use yarn)
+All you need is to clone this repo and instal all the dependencies, by using npm or yarn (i recommend to use yarn).
 
-`yarn install`
+command: `yarn install`
 
 After all dependencies installed, here all the available commands:
 
