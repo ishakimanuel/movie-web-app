@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from './button';
+import { Button } from './button/button';
 
 export const CardBody = (props) => {
   return <div className="card-body p-4 h-40 self-center" {...props} />;

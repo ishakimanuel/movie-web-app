@@ -19,10 +19,11 @@ export const FiniteScroll = React.memo((props) => {
     isLoading,
     ...atributtes
   } = props;
+
   const [lastRowRef, lastRowInView] = useInView({
     root: document.getElementById('#FiniteScroll'),
   });
-  console.log(currentPage, totalPage);
+
   useEffect(() => {
     lastRowInView && currentPage < totalPage && onLastScroll();
   }, [lastRowInView]);
@@ -33,10 +34,11 @@ export const FiniteScroll = React.memo((props) => {
     return itemList.map((item, i) => {
       const props = { key: i, finiteScrollChildren: children, item };
       const shouldAssignRefIndicator = i === itemList.length - lastScrollOffset;
-      console.log(shouldAssignRefIndicator);
+
       if (shouldAssignRefIndicator) {
         props.itemRef = lastRowRef;
       }
+
       return <FiniteScrollItem {...props} index={i} />;
     });
   };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'common/components/button';
+import { Button } from 'common/components/button/button';
 import Logo from 'common/components/logo';
 import './home.scss';
 

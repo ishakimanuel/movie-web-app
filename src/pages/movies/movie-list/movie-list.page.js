@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Card } from '../../../common/components/card';
-import { InputSearch } from '../../../common/components/input';
+import { InputSearch } from '../../../common/components/input/input';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMovieList } from 'pages/movies/movie-list/movie-list.redux';
 import Modal from 'common/components/modal/modal';
@@ -14,12 +14,14 @@ import {
 import { FiniteScroll } from 'common/components/finite-scroll';
 
 const MovieList = () => {
+  const dispatch = useDispatch();
   const movieList = useSelector((state) => state.movieList);
   const movieSuggestions = useSelector((state) => state.movieSuggestions);
 
   const [keyword, setKeyword] = useState(movieList.lastKeyword);
-  const dispatch = useDispatch();
+
   const { openModal, isOpen, closeModal, state: modalState } = useModal();
+
   useEffect(() => {
     dispatch(fetchMovieList({ keyword }));
   }, []);
@@ -44,7 +46,6 @@ const MovieList = () => {
   };
 
   const onLastScrollMovieList = () => {
-    console.log('onLastScroll');
     dispatch(
       fetchMovieList({
         keyword: keyword,
@@ -74,6 +75,7 @@ const MovieList = () => {
           is not found
         </h2>
       );
+
     return (
       <FiniteScroll
         itemList={movieList.list}
@@ -124,7 +126,7 @@ const MovieList = () => {
           onChange={onChangeInputSearch}
           onClickSuggestion={onClickMovieSuggestion}
           className="w-50"
-          suggestionList={movieSuggestions.list}
+          suggestionList={movieSuggestions.list?.map((item) => item.Title)}
         />
         {renderMovieList()}
       </div>
