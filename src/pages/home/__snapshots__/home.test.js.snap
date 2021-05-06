@@ -20,7 +20,7 @@ exports[`Home Page Should render consistent homepage UI 1`] = `
           <span
             class="text-white"
           >
-            App
+            WebApp
           </span>
         </h1>
       </div>
