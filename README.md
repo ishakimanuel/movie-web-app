@@ -17,7 +17,7 @@ All you need is to clone this repo and instal all the dependencies, by using npm
 
 command: `yarn install`
 
-After all dependencies installed, here all the available commands:
+After all dependencies installed, here all the available commands to run this repo:
 
 - `yarn dev` to running the repo in development mode
 - `yarn build` to build the repo in ready production
