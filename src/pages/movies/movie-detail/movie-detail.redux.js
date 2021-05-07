@@ -22,11 +22,6 @@ const movieDetailSlice = createSlice({
     detail: null,
     requestStatus: REQUEST_STATUS.idle,
   },
-  reducers: {
-    setKeyword(state, action) {
-      state.keyword = action.payload;
-    },
-  },
   extraReducers: (builder) => {
     apiRequestReducer(builder, fetchMovieDetail, {
       onFulfilled: (state, action) => {
