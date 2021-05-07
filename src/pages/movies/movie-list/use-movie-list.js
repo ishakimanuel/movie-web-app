@@ -13,10 +13,7 @@ const useMovieList = () => {
   const [keyword, setKeyword] = React.useState(movieList.lastKeyword);
 
   React.useEffect(() => {
-    let a = true;
-    if (a) {
-      dispatch(fetchMovieList({ keyword }));
-    }
+    dispatch(fetchMovieList({ keyword }));
   }, []);
 
   const onChangeInputSearch = (e) => {
